@@ -11,3 +11,9 @@ services:
       - "8888:8888"
     env_file:
       - .env
+  supabase-connector:
+    build:
+      context: ./data
+      dockerfile: dockerfile
+    env_file:
+      - .env
