@@ -3,7 +3,7 @@ services:
   data-workstation:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: dockerfile
     volumes:
       - .:/app
       - ./data:/app/data
