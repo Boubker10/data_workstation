@@ -1,0 +1,13 @@
+version: "3"
+services:
+  data-workstation:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - ./data:/app/data
+    ports:
+      - "8888:8888"
+    env_file:
+      - .env
