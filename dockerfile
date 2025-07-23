@@ -1,10 +1,21 @@
-FROM python:3.11-slim
+FROM python:3.10-slim
+
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    git \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-COPY requirements.txt requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+COPY requirements.txt .
 
-COPY . .
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
-CMD ["jupyter", "lab", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token=''", "--NotebookApp.password=''"]
+RUN python -m ipykernel install --user --name=python310 --display-name "Python 3.10 (Docker)"
+
+RUN pip install jupyterlab
+
+EXPOSE 8888
+
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]

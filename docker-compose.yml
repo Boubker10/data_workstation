@@ -1,9 +1,10 @@
 version: "3"
+
 services:
   data-workstation:
     build:
       context: .
-      dockerfile: dockerfile
+      dockerfile: Dockerfile
     volumes:
       - .:/app
       - ./data:/app/data
@@ -11,9 +12,12 @@ services:
       - "8888:8888"
     env_file:
       - .env
+
   supabase-connector:
     build:
       context: ./data
-      dockerfile: dockerfile
+      dockerfile: Dockerfile
     env_file:
       - .env
+    depends_on:
+      - data-workstation
