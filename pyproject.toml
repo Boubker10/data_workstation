@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "data-workstation"
+version = "0.1.0"
+description = " DEV ENV For Data Science project"
+authors = ["Boubker Bennani <boubker.bennani.pro@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pandas = "*"
+numpy = "*"
+scikit-learn = "*"
+matplotlib = "*"
+seaborn = "*"
+jupyterlab = "*"
+ipykernel = "*"
+python-dotenv = "*"
+psycopg2-binary = "*"
+plotly = "*"
+xgboost = "*"
+lightgbm = "*"
+statsmodels = "*"
+nltk = "*"
+spacy = "*"
+fastapi = "*"
+uvicorn = "*"
+sqlalchemy = "*"
+transformers = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
