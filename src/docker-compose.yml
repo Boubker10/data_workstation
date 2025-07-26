@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  fraud-api:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: fraud-api
+    ports:
+      - "8000:8000"
+    restart: always

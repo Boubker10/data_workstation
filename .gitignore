@@ -5,3 +5,4 @@ __pycache__/
 data/*
 !.gitkeep
 .ipynb_checkpoints/
+src/app/model/*.pkl
