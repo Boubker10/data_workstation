@@ -3,9 +3,20 @@
 --    - table temporaire avec colonnes Store, Date
 -- Résultat : Ajoute les colonnes Super_Bowl_flag, Labour_Day_flag, Thanksgiving_flag, Christmas_flag
 
-WITH base_data AS (
-    -- à remplacer par appel vers 04_growth_features.sql ou équivalent
-    SELECT * FROM base_data -- placeholder
+{{PORTFOLIO_CTE}},
+base_data AS (
+    SELECT 
+        p.store AS Store,
+        p.date AS Date,
+        w."Weekly_Sales",
+        w."Holiday_Flag",
+        w."Temperature",
+        w."Fuel_Price",
+        w."CPI",
+        w."Unemployment"
+        -- Ajoutez ici les autres colonnes dont vous avez besoin des étapes précédentes
+    FROM portfolio p
+    JOIN walmart w ON w."Store" = p.store AND w."Date" = p.date
 ),
 
 events AS (
@@ -29,17 +40,13 @@ events AS (
 
 flagged_data AS (
     SELECT d.*,
-           MAX(CASE WHEN e.event_name = 'Super_Bowl' AND ABS(DATE_PART('day', d.Date - e.event_date)) <= 7 THEN 1 ELSE 0 END) AS Super_Bowl_flag,
-           MAX(CASE WHEN e.event_name = 'Labour_Day' AND ABS(DATE_PART('day', d.Date - e.event_date)) <= 7 THEN 1 ELSE 0 END) AS Labour_Day_flag,
-           MAX(CASE WHEN e.event_name = 'Thanksgiving' AND ABS(DATE_PART('day', d.Date - e.event_date)) <= 7 THEN 1 ELSE 0 END) AS Thanksgiving_flag,
-           MAX(CASE WHEN e.event_name = 'Christmas' AND ABS(DATE_PART('day', d.Date - e.event_date)) <= 7 THEN 1 ELSE 0 END) AS Christmas_flag
+           MAX(CASE WHEN e.event_name = 'Super_Bowl' AND ABS(TO_DATE(d.Date, 'DD-MM-YYYY') - e.event_date) <= 7 THEN 1 ELSE 0 END) AS Super_Bowl_flag,
+           MAX(CASE WHEN e.event_name = 'Labour_Day' AND ABS(TO_DATE(d.Date, 'DD-MM-YYYY') - e.event_date) <= 7 THEN 1 ELSE 0 END) AS Labour_Day_flag,
+           MAX(CASE WHEN e.event_name = 'Thanksgiving' AND ABS(TO_DATE(d.Date, 'DD-MM-YYYY') - e.event_date) <= 7 THEN 1 ELSE 0 END) AS Thanksgiving_flag,
+           MAX(CASE WHEN e.event_name = 'Christmas' AND ABS(TO_DATE(d.Date, 'DD-MM-YYYY') - e.event_date) <= 7 THEN 1 ELSE 0 END) AS Christmas_flag
     FROM base_data d
-    LEFT JOIN events e ON ABS(DATE_PART('day', d.Date - e.event_date)) <= 7
-    GROUP BY d.Store, d.Date, d.Weekly_Sales, d.Holiday_Flag, d.Temperature, d.Fuel_Price, d.CPI, d.Unemployment,
-             d.month, d.season, d.day_of_week, d.week_of_year, d.quarter, d.is_month_start, d.is_month_end,
-             d.is_quarter_start, d.is_quarter_end,
-             d.Weekly_Sales_rolling_mean_2, d.Weekly_Sales_rolling_std_2, d.Weekly_Sales_rolling_mean_4, d.Weekly_Sales_rolling_std_4,
-             d.Weekly_Sales_diff, d.Weekly_Sales_pct_change
+    LEFT JOIN events e ON ABS(TO_DATE(d.Date, 'DD-MM-YYYY') - e.event_date) <= 7
+    GROUP BY d.Store, d.Date, d."Weekly_Sales", d."Holiday_Flag", d."Temperature", d."Fuel_Price", d."CPI", d."Unemployment"
 )
 
 SELECT * FROM flagged_data
