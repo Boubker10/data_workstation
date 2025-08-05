@@ -9,19 +9,19 @@ FROM walmart AS m
 """
 portfolio = run_query(query)
 
-base_df = fetch_feature("growth_features.sql", portfolio=portfolio)
+base_df = fetch_feature("date_feature", portfolio=portfolio)
 
 pipe = make_pipeline(
     DataFrameMerger(
-        df_to_merge=fetch_feature("date_feature.sql", portfolio=portfolio),
+        df_to_merge=fetch_feature("interaction_features", portfolio=portfolio),
         on=["store", "date"], how="left"
     ),
     DataFrameMerger(
-        df_to_merge=fetch_feature("interaction_features.sql", portfolio=portfolio),
+        df_to_merge=fetch_feature("growth_features", portfolio=portfolio),
         on=["store", "date"], how="left"
     ),
     DataFrameMerger(
-        df_to_merge=fetch_feature("rolling_features.sql", portfolio=portfolio),
+        df_to_merge=fetch_feature("rolling_features", portfolio=portfolio),
         on=["store", "date"], how="left"
     ),
     SimpleFillnaImputer(
