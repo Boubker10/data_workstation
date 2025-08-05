@@ -35,3 +35,25 @@ class GroupwiseImputer(BaseEstimator, TransformerMixin):
             )
         
         return X
+    
+class SimpleFillnaImputer(BaseEstimator, TransformerMixin):
+    def __init__(self, target_cols, strategy='constant', fill_value=0):
+        self.target_cols = target_cols
+        self.strategy = strategy
+        self.fill_value = fill_value
+        self.fill_values_ = {}
+
+    def fit(self, X, y=None):
+        X = X.copy()
+        for col in self.target_cols:
+            if self.strategy == 'constant':
+                self.fill_values_[col] = self.fill_value
+            else:
+                raise ValueError("Currently only 'constant' strategy is supported for this use case.")
+        return self
+
+    def transform(self, X):
+        X = X.copy()
+        for col in self.target_cols:
+            X[col] = X[col].fillna(self.fill_values_[col])
+        return X
