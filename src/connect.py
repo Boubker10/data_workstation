@@ -185,35 +185,38 @@ def save_df_to_db(df, table_name, key_column='*'):
 def fetch_feature(feature_name, portfolio):
     """
     Args:
-        feature_name (str): nom du fichier SQL dans le dossier feature_store (ex: 'growth_feature.sql')
+        feature_name (str): nom du fichier SQL dans le dossier feature_store (ex: 'growth_feature' sans .sql)
         portfolio (list of tuples | pd.DataFrame): 
-            - soit une liste de tuples [(store, date), ...]
+             - soit une liste de tuples [(store, date), ...]
             - soit un DataFrame contenant les colonnes 'Store' et 'Date'
-
+     
     Returns:
         pd.DataFrame: Résultat de la requête SQL enrichie avec le portefeuille
     """
     import os
     import pandas as pd
-    from src.connect import run_query, config  
-
+    from src.connect import run_query, config
+    
     if isinstance(portfolio, pd.DataFrame):
         if 'Store' not in portfolio.columns or 'Date' not in portfolio.columns:
             raise ValueError("Le DataFrame doit contenir les colonnes 'Store' et 'Date'")
         portfolio = list(portfolio[['Store', 'Date']].itertuples(index=False, name=None))
-
+    
     values_str = ', '.join([f"({store}, '{date}')" for store, date in portfolio])
     cte_portfolio = f"WITH portfolio(store, date) AS (VALUES {values_str})"
-
+    
+    if not feature_name.endswith('.sql'):
+        feature_name = f"{feature_name}.sql"
+    
     feature_sql_path = os.path.join(config['feature_store_path'], feature_name)
     if not os.path.exists(feature_sql_path):
         raise FileNotFoundError(f"Feature SQL file not found: {feature_sql_path}")
-    
+        
     with open(feature_sql_path, 'r') as f:
         sql = f.read()
-
+    
     sql = sql.replace('{{PORTFOLIO_CTE}}', cte_portfolio)
-
+    
     df = run_query(sql)
     return df
 
