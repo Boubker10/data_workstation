@@ -1,8 +1,3 @@
--- Description : Ajout des flags proches des événements importants (fenêtre +/- 7 jours)
--- Entrées requises :
---    - table temporaire avec colonnes Store, Date
--- Résultat : Ajoute les colonnes Super_Bowl_flag, Labour_Day_flag, Thanksgiving_flag, Christmas_flag
-
 {{PORTFOLIO_CTE}},
 base_data AS (
     SELECT 

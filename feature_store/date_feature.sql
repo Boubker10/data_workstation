@@ -1,9 +1,4 @@
--- Description : Ajoute des features basées sur la date (saison, jour de la semaine, etc.)
--- Entrées requises : 
---    - table temporaire filtered_data avec colonnes Store, Date, Weekly_Sales, Holiday_Flag, Temperature, Fuel_Price, CPI, Unemployment
--- Résultat : filtered_data + colonnes month, season, day_of_week, week_of_year, quarter, is_month_start, is_month_end, is_quarter_start, is_quarter_end
-
-{{PORTFOLIO_CTE}},  -- Référence à votre CTE existant
+{{PORTFOLIO_CTE}}, 
 base_data AS (
     SELECT 
         p.store AS Store,
