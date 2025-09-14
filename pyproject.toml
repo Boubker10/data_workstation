@@ -29,3 +29,8 @@ transformers = "*"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "ipykernel (>=6.30.1,<7.0.0)"
+]
