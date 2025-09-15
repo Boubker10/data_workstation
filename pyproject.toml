@@ -5,7 +5,6 @@ description = "DEV ENV For Data Science project"
 authors = ["Boubker Bennani <boubker.bennani.pro@gmail.com>"]
 package-mode = false
 
-
 [tool.poetry.dependencies]
 python = "^3.10"
 pandas = "*"
@@ -28,11 +27,6 @@ uvicorn = "*"
 sqlalchemy = "*"
 transformers = "*"
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
-[dependency-groups]
-dev = [
-    "ipykernel (>=6.30.1,<7.0.0)"
-]
+[tool.poetry.group.dev.dependencies]
+black = "*"
+pytest = "*"
